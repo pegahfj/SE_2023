@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="Source/Teilaufgabe 2 - Client/Client/src/main/java"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="Source/Teilaufgabe 2 - Client/Client/build/download/se1_messages_4.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="Source/Teilaufgabe 2 - Client/Client/build/download/se1_messages_4.1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="Source/Teilaufgabe 2 - Client/Client/build/download/swe_messages_4.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="Source/Teilaufgabe 2 - Client/Client/build/libs/ExampleClient.jar"/>
+	<classpathentry exported="true" kind="lib" path="Source/Teilaufgabe 2 - Client/Client/gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Users/pegah/.gradle/caches/modules-2/files-2.1/io.projectreactor/reactor-core/3.4.10/4fac3e29002904d750987aeb6249ff1cd47c5fd5/reactor-core-3.4.10.jar" sourcepath="/Users/pegah/.gradle/caches/modules-2/files-2.1/io.projectreactor/reactor-core/3.4.10/bf9878b63d8bff52e2af41d1d6ca852281579cb6/reactor-core-3.4.10-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/Users/pegah/Desktop/SWE1/Aufgaben-2022WS/Task 2/spcorejars/org.springframework.core-3.0.1.RELEASE-A.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Users/pegah/.gradle/caches/modules-2/files-2.1/org.springframework/spring-webflux/5.3.10/f815fe9eb32c34fd6b116ac8eeee045e44987110/spring-webflux-5.3.10.jar" sourcepath="/Users/pegah/.gradle/caches/modules-2/files-2.1/org.springframework/spring-webflux/5.3.10/11570c00e47a02a2ac9816e00089519082aecfb7/spring-webflux-5.3.10-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/Users/pegah/.gradle/caches/modules-2/files-2.1/org.springframework/spring-web/5.3.10/31984cef4b5d38f2711cf870994c43e89619ff4e/spring-web-5.3.10.jar" sourcepath="/Users/pegah/.gradle/caches/modules-2/files-2.1/org.springframework/spring-web/5.3.10/63a2c8efa9006c0f14743cbcaab2c62a43ec5f0e/spring-web-5.3.10-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="Source/Teilaufgabe 2 - Client/Client/bin/main"/>
+</classpath>
