@@ -7,6 +7,7 @@ public class PlayerModel {
     private EPlayerState playerState;
 	private boolean hasTreasure;
 	private Node myPos;
+	private Node oponPos;
 	private Node treasurePos;
 	private Node oponentFort;
 
@@ -52,6 +53,15 @@ public class PlayerModel {
         
     	this.myPos = myPos;
     }
+
+	public Node getOponPos() {
+		return oponPos;
+	}
+
+
+	public void setOponPos(Node oponPos) {
+		this.oponPos = oponPos;
+	}
 
 
 	public Node getTreasurePos() {

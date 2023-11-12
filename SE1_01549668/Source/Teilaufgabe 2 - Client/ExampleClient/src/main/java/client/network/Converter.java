@@ -64,6 +64,10 @@ public class Converter {
 					myPlayer.setMyPos(myNode);
 				}
 				
+				if (fullmapNode.getPlayerPositionState() == EPlayerPositionState.EnemyPlayerPosition || fullmapNode.getPlayerPositionState() == EPlayerPositionState.BothPlayerPosition) {
+					
+					myPlayer.setOponPos(myNode);
+				}
 				if (fullmapNode.getTreasureState().equals(ETreasureState.MyTreasureIsPresent))
 					myPlayer.setTreasurePos(myNode);
 				
