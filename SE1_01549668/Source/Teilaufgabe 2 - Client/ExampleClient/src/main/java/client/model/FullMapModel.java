@@ -77,11 +77,14 @@ public class FullMapModel extends MapModel {
 	}
 
 
+	public void setIsSquare() {
+		
+		this.isSquare = this.mapNodes.stream().filter(n -> n.getCoordinates().getY() > 4).findFirst().isPresent();
+		
+	}
 	public boolean isSquare() {
 
-		this.isSquare = this.mapNodes.stream().filter(n -> n.getCoordinates().getY() > 4).findFirst().isPresent();
-
-		return isSquare;
+		return this.isSquare;
 	}
 
 	

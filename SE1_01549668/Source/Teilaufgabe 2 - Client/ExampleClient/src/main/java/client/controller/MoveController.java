@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Stack;
 
@@ -13,10 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import client.enums.EDirection;
 import client.enums.EField;
-import client.enums.EPathStrategy;
 import client.model.GameModelService;
-import client.model.GameStateModel;
-import client.model.HalfMapModel;
 import client.model.Node;
 import client.model.PathFinderService;
 
@@ -26,6 +24,8 @@ public class MoveController {
 	private PathFinderService pathFinder;
 
 //	private boolean foundTreasure;
+	private Optional<Node> treasurePos = Optional.empty();
+	private Optional<Node> fortPos = Optional.empty();
 	private Node currDestination;
 	private List<Node> currPath;
 	private List<Node> visitedNodes;
@@ -48,9 +48,12 @@ public class MoveController {
 
     public Stack<EDirection> getDirectionStack() {
     	
-    	Node myPos = this.gameService.getGameState().getMyPlayer().getMyPos();
-		Node nextPos = this.getNextNode();
+    	Node myPos = this.gameService.getGameState().getMyPlayer().getCurrentPos().get();
+		logger.info("MovController getDirectionStack -> myPos {} ", myPos );
 		
+		Node nextPos = this.getNextNode();
+		logger.info("MovController getDirectionStack -> nextPos {} ", nextPos );
+
     	Stack<EDirection> directions = new Stack<>();
 
         int edgeWeight = myPos.getFieldType().getCosts() + nextPos.getFieldType().getCosts();
@@ -59,7 +62,7 @@ public class MoveController {
 
         while (edgeWeight > 0) {
             directions.push(dir);
-            // logger.debug("populateDirections {} :: weightCounter {} :: ", weight);
+             logger.debug("populateDirections dir {} :: weightCounter {}  ", dir, edgeWeight);
             --edgeWeight;
         }
         
@@ -114,31 +117,7 @@ public class MoveController {
 	
 	}
 	
-	
-	
-	private boolean canFindTreasure() {
-		if(gameService.getGameState().getMyPlayer().getTreasurePos() != null && 
-				!gameService.getGameState().getMyPlayer().getTreasurePos().equals(this.currDestination) && 
-				!gameService.getGameState().getMyPlayer().hasTreasure()) {
-						
-			return true;
-					
-		}
-		
-		return false;
-	}
-	
-	
-	private boolean canFindFort() {
-		if (gameService.getGameState().getMyPlayer().getOpFortPos() != null && 
-				gameService.getGameState().getMyPlayer().getOpFortPos().equals(this.currDestination) && 
-				gameService.getGameState().getMyPlayer().hasTreasure()) {
-						
-			return true;
-		}
-		
-		return false;
-	}
+
 	
 	
 //	public void setPathStrategy() {
@@ -182,28 +161,38 @@ public class MoveController {
 		
 		// need to get position node directly from map?
 		// throw exception if source doesn't exist
-		Node source = this.gameService.getGameState().getMap().getMapNodes().stream().filter(n -> (n.equals(this.gameService.getGameState().getMyPlayer().getMyPos()))).findFirst().get();
-
+		Node source = this.gameService.getGameState().getMap().getMapNodes().stream().filter(n -> (n.equals(this.gameService.getGameState().getMyPlayer().getCurrentPos().get()))).findFirst().get();
+		
+		logger.info("MovController getNewPath -> source {} ", source );
+		
 		visitedNodes.add(source);
 
 //		this.pathFinder.dijkstra(source);
 		
 		Node destination = null;
 		
+		this.updateTargetPos();
+		
 		//pass destination to generatpath
-		if (this.gameService.getGameState().getMyPlayer().getTreasurePos() != null && !this.gameService.getGameState().getMyPlayer().hasTreasure())
+		if (this.treasurePos.isPresent()  && !this.gameService.getGameState().treasureCollected()) {
 			
 			destination = this.gameService.getGameState().getMap().getMapNodes().stream().filter(n -> n.equals(
-					this.gameService.getGameState().getMyPlayer().getTreasurePos())).findFirst().get();
+					this.treasurePos.get())).findFirst().get();
+			
+			logger.info("MovController getNewPath -> destination treasurePos {} ", destination );
 		
-		else if (this.gameService.getGameState().getMyPlayer().getOpFortPos() != null && this.gameService.getGameState().getMyPlayer().hasTreasure())
+		} else if (this.fortPos.isPresent()  && this.gameService.getGameState().treasureCollected()) {
 		
 			destination = this.gameService.getGameState().getMap().getMapNodes().stream().filter(n -> n.equals(
-					this.gameService.getGameState().getMyPlayer().getOpFortPos())).findFirst().get();
+					this.fortPos.get())).findFirst().get();
 		
-		else {
+			logger.info("MovController getNewPath -> destination fortPos {} ", destination );
+		
+		} else {
 
 			destination = randDestination(this.gameService.getGameState().getMap().getMapNodes());
+
+			logger.info("MovController getNewPath -> destination random {} ", destination );
 			
 //			if(this.gameService.getGameState().getMyPlayer().hasTreasure())
 //
@@ -236,5 +225,38 @@ public class MoveController {
 		 
 		return dest;
 	}
-
+	
+	
+	private boolean canFindTreasure() {
+		this.updateTargetPos();
+		
+		if(this.treasurePos.isPresent() && 
+				!this.treasurePos.get().equals(this.currDestination) && 
+				!gameService.getGameState().treasureCollected()) {
+						
+			return true;
+					
+		}
+		
+		return false;
+	}
+	
+	
+	private boolean canFindFort() {
+		this.updateTargetPos();
+		
+		if (this.fortPos.isPresent() && 
+				!this.fortPos.get().equals(this.currDestination) && 
+				gameService.getGameState().treasureCollected()) {
+						
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private void updateTargetPos() {
+		this.treasurePos = this.gameService.getGameState().getMyPlayer().getTargetPos();
+		this.fortPos = this.gameService.getGameState().getEnmyPlayer().getTargetPos();
+	}
 }

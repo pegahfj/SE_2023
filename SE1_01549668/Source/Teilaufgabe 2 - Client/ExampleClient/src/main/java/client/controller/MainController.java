@@ -46,17 +46,21 @@ public class MainController {
 	
 	
 	public void movementHandler() {
-		while(this.gameService.getGameState().getMap() == null) {
+		while(!this.gameService.getGameState().fullMapPresent()) {
 			
-			this.endPoint.getGameState();
-			
+			this.endPoint.getGameState();	
 		}
 		
+		this.gameService.getGameState().getMap().setIsSquare();
 		
-		this.gameService.getGameState().getMap().isSquare();
+		while(this.gameService.getGameState().getMyPlayer().getCurrentPos().isEmpty()) {
+		
+			this.endPoint.getGameState();
+		}
+		
 		this.gameService.getGameState().getMap().determineBorders(
-				this.gameService.getGameState().getMyPlayer().getMyPos().getCoordinates());
-
+				this.gameService.getGameState().getMyPlayer().getCurrentPos().get().getCoordinates());
+		
 		while (!this.gameService.getGameState().gameOver()) {
 			Stack<EDirection> directions = this.moveCntrl.getDirectionStack();
 			while(directions.size() != 0) {

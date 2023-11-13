@@ -1,91 +1,46 @@
 package client.model;
 
-import client.enums.EPlayerState;
+import java.util.Optional;
+
 
 public class PlayerModel {
 
-    private EPlayerState playerState;
-	private boolean hasTreasure;
-	private Node myPos;
-	private Node oponPos;
-	private Node treasurePos;
-	private Node oponentFort;
+	private Optional<Node> currentPos = Optional.empty();
+	private Optional<Node> targetPos = Optional.empty();
+	
 
-    public PlayerModel(EPlayerState plSt, boolean treasure){
-       
-    	this.playerState = plSt;
-    	this.hasTreasure = treasure;
+    public PlayerModel(){
+           	
+    }
+
+    
+    
+    public Optional<Node> getCurrentPos() {
+        
+    	return this.currentPos;
+    }
+
+    
+    public void setCurrentPos(Node myPos) {
+    	Optional<Node> pos = Optional.of(myPos);
     	
-    }
-
-    
-    public EPlayerState getPlayerState() {
-       
-    	return this.playerState;
-    }
-
-    
-    public void setPlayerState(EPlayerState playerState) {
-        
-    	this.playerState = playerState;
-    }
-
-    
-    public boolean hasTreasure() {
-        
-    	return this.hasTreasure;
+    	this.currentPos = pos;
     }
 
 
-    public void setHasTreasure(boolean hasTreasure) {
-        
-    	this.hasTreasure = hasTreasure;
-    }
-
-    
-    public Node getMyPos() {
-        
-    	return this.myPos;
-    }
-
-    
-    public void setMyPos(Node myPos) {
-        
-    	this.myPos = myPos;
-    }
-
-	public Node getOponPos() {
-		return oponPos;
-	}
-
-
-	public void setOponPos(Node oponPos) {
-		this.oponPos = oponPos;
-	}
-
-
-	public Node getTreasurePos() {
+    public Optional<Node> getTargetPos() {
 		
-		return treasurePos;
-	}
+ 		return this.targetPos;
+ 	}
 
 
-	public void setTreasurePos(Node treasurePos) {
-		
-		this.treasurePos = treasurePos;
-	}
+ 	public void setTargetPos(Node targetPos) {
+    	Optional<Node> pos = Optional.of(targetPos);
+
+ 		this.targetPos = pos;
+ 	}
 
 
-	public Node getOpFortPos() {
-		
-		return oponentFort;
-	}
-
-
-	public void setOpFortPos(Node fortPos) {
-		
-		this.oponentFort = fortPos;
-	}
     	
     
 }

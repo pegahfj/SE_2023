@@ -1,5 +1,4 @@
 package client.network;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,13 +15,11 @@ import messagesbase.messagesfromserver.EPlayerGameState;
 import messagesbase.messagesfromserver.GameState;
 import messagesbase.messagesfromserver.PlayerState;
 import client.enums.EDirection;
-import client.enums.EField;
 import client.model.GameModelService;
-import client.model.GameStateModel;
 import client.model.HalfMapModel;
 
 public class ServerEndPoint {
-    private static Logger logger = LoggerFactory.getLogger(HalfMapModel.class);
+    private static Logger logger = LoggerFactory.getLogger(ServerEndPoint.class);
 
     private WebClient baseWebClient;
 
@@ -65,13 +62,13 @@ public class ServerEndPoint {
 		waitForTurn();
 		Mono<ResponseEnvelope> webAccess = this.baseWebClient.method(HttpMethod.POST)
 				.uri("/" + this.gameID + "/halfmaps")
-				.body(BodyInserters.fromValue(convertToHalfMap(this.uniquePlayerID, chm))).retrieve()
+				.body(BodyInserters.fromValue(converter.convertToHalfMap(this.uniquePlayerID, chm))).retrieve()
 				.bodyToMono(ResponseEnvelope.class);
 
 		ResponseEnvelope<UniquePlayerIdentifier> resultReg = webAccess.block();
 
 		if (resultReg.getState() == ERequestState.Error)
-			logger.error("sendHalfMap error, errormessage: " +resultReg.getExceptionMessage());
+			logger.error("send HalfMap error, errormessage: " +resultReg.getExceptionMessage());
 		else{
 			logger.info("HalfMap sent Exception Msg: " + resultReg.getExceptionMessage());
 		}
@@ -96,11 +93,7 @@ public class ServerEndPoint {
 
 	}
 	
-	public void waitForTurn() {
-		while (getMyPlayer(getGameState()).equals(EPlayerGameState.MustWait))
-			;
-	}
-
+	
 	public GameState getGameState() {
 		Mono<ResponseEnvelope> webAccess = this.baseWebClient.method(HttpMethod.GET)
 				.uri("/" + this.gameID + "/states/" + this.uniquePlayerID).retrieve()
@@ -118,6 +111,7 @@ public class ServerEndPoint {
 		return this.gs;
 	}
 		
+	
 	public EPlayerGameState getMyPlayer(GameState gs) {
 		for (PlayerState p : gs.getPlayers()) {
 			if (p.getUniquePlayerID().equals(uniquePlayerID))
@@ -126,16 +120,13 @@ public class ServerEndPoint {
 		}
 		return null;
 	}
-		
-	public PlayerHalfMap convertToHalfMap(String uniquePlayerID, HalfMapModel chm) {
-		return new PlayerHalfMap(uniquePlayerID, chm.getMapNodes().stream().map(n -> {
-			return new PlayerHalfMapNode(n.getCoordinates().getX(), n.getCoordinates().getY(), n.hasFort(),
-					convertToETerrain(n.getFieldType()));
-		}).collect(Collectors.toList()));
-	}	
-	private ETerrain convertToETerrain(EField t) {
-		return t == EField.GRASS ? ETerrain.Grass
-				: t == EField.MOUNTAIN ? ETerrain.Mountain : ETerrain.Water;
+
+	
+	public void waitForTurn() {
+		while (getMyPlayer(getGameState()).equals(EPlayerGameState.MustWait))
+			;
 	}
+
+	
 }
 

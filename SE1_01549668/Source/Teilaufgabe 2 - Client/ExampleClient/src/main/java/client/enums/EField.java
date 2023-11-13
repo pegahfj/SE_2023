@@ -12,7 +12,7 @@ package client.enums;
 
 
 public enum EField {
-	GRASS(10) {
+	GRASS(1) {
 		public String toString() {
 			return "““‘“";
 		}
@@ -23,7 +23,7 @@ public enum EField {
 			return "≈≈≈";
 		}
 	},
-	MOUNTAIN(30) {
+	MOUNTAIN(2) {
 		public String toString() {
 			return " ∆∆ ";
 		}
